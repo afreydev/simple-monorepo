@@ -1,0 +1,21 @@
+[
+    {
+        "name": "companies-api",
+        "ci": [
+            {
+                "type": "build",
+                "spec": {
+                    "type": "docker"   
+                }
+            }
+        ],
+        "cd": [
+            {
+                "type": "deploy",
+                "spec": {
+                    "deploy-type": "helm"
+                }
+            }
+        ]
+    }
+]
