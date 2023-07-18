@@ -7,7 +7,7 @@ env:
 jobs:
   ci-projects:
     runs-on: ubuntu-latest
-    if: github.ref != 'refs/heads/main'
+    #if: github.ref != 'refs/heads/main'
     outputs:
       projects: ${{ steps.project-step.outputs.projects }}
     steps:
