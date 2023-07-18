@@ -9,6 +9,16 @@
             "cd": {
                 "deploy": "helm"
             }
+        },
+        {
+            "id": "companies-ui",
+            "path": "frontend/companies",
+            "ci": {
+                "build": "docker"
+            },
+            "cd": {
+                "deploy": "helm"
+            }
         }
     ]
 }
