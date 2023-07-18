@@ -9,7 +9,7 @@ jobs:
     runs-on: ubuntu-latest
     #if: github.ref != 'refs/heads/main'
     outputs:
-      projects: ${{ steps.project-step.outputs.projects }}
+      projects: ${{ steps.api-step.outputs.projects }}
     steps:
       - uses: actions/checkout@v2
         with:
