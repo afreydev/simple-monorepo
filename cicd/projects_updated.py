@@ -49,9 +49,10 @@ def search_in_updated_projects(repo_path, commit = LAST_COMMIT):
 
 def get_project_matrix(projects):
     project_list = list(projects)
-    list_str = ""
+    list_str = "["
     for project in project_list:
-        list_str += f"{project}"
+        list_str += f"\"{project}\""
+    list_str = "]"
     return list_str
 
 def get_current_branch(repo_path):

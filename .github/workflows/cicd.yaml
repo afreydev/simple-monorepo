@@ -34,7 +34,7 @@ jobs:
       - ci-projects
     strategy:
       matrix:
-        project: ${{ split(needs.ci-projects.outputs.projects,',') }}
+        project: ${{ fromJson(needs.ci-projects.outputs.projects) }}
     uses: ./.github/workflows/ci.yaml
     with:
       project-name: ${{ matrix.project }}
