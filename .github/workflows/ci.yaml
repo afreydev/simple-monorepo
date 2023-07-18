@@ -36,6 +36,8 @@ jobs:
   build-docker:
     runs-on: ubuntu-latest
     if: needs.get-ci-config.outputs.build == 'docker'
+    needs:
+      - get-ci-config
     defaults:
       run:
         working-directory: ${{ needs.get-ci-config.outputs.working-dir }}
