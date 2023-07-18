@@ -46,9 +46,6 @@ jobs:
     if: needs.get-cd-config.outputs.deploy == 'helm'
     needs:
       - ci
-    defaults:
-      run:
-        working-directory: ${{ needs.get-cd-config.outputs.working-dir }}
     steps:
       - uses: actions/checkout@v2
       -
