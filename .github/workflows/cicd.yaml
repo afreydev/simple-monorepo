@@ -26,7 +26,7 @@ jobs:
       - id: api-step
         name: Check change in api
         run: |
-          projects=$(python ./monorepo/projects_updated.py -c "origin/main")
+          projects=$(python ./cicd/projects_updated.py -c "origin/main")
           echo "projects=$projects" >> "$GITHUB_OUTPUT"
 
   ci:
