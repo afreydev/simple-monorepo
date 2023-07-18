@@ -62,7 +62,7 @@ jobs:
       - id: cd-step
         name: Check change in cd
         run: |
-          projects=$(python ./cicd/projects_updated.py -c "origin/main")
+          projects=$(python ./cicd/projects_updated.py)
           echo $projects
           echo "projects=$projects" >> "$GITHUB_OUTPUT"
 
