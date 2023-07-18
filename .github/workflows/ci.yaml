@@ -27,7 +27,7 @@ jobs:
         id: get-working-dir-step
         run: |
           working-dir=$(python get_project_config.py -p ${{ inputs.project-name }})
-          echo "working-dir=$working-dir" >> "$GITHUB_OUTPUT"
+          echo "working-dir='$working-dir'" >> "$GITHUB_OUTPUT"
       - name: Get build
         id: get-build-step
         run: |
