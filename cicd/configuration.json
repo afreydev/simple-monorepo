@@ -1,0 +1,14 @@
+{
+    "projects": [
+        {
+            "id": "companies-api",
+            "path": "backend/companies",
+            "ci": {
+                "build": "docker"
+            },
+            "cd": {
+                "deploy": "helm"
+            }
+        }
+    ]
+}
