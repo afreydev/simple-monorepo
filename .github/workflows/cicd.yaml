@@ -28,7 +28,7 @@ jobs:
         run: |
           projects=$(python ./cicd/projects_updated.py)
           echo $projects
-          echo "projects=$projects" >> "$GITHUB_OUTPUT"
+          echo "projects='$projects'" >> "$GITHUB_OUTPUT"
 
   ci:
     needs:
