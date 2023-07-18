@@ -26,12 +26,12 @@ jobs:
       - name: Get working dir
         id: get-working-dir-step
         run: |
-          working-dir=$(python get_working_dir.py -p ${{ inputs.project-name }})
+          working-dir=$(python get_project_config.py -p ${{ inputs.project-name }})
           echo "working-dir=$working-dir" >> "$GITHUB_OUTPUT"
       - name: Get build
         id: get-build-step
         run: |
-          build=$(python get_working_dir.py -p ${{ inputs.project-name }} -s ci -c build)
+          build=$(python get_project_config.py -p ${{ inputs.project-name }} -s ci -c build)
           echo "build=$build" >> "$GITHUB_OUTPUT"
   build-docker:
     runs-on: ubuntu-latest
