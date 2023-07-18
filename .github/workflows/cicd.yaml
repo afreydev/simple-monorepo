@@ -27,6 +27,7 @@ jobs:
         name: Check change in api
         run: |
           projects=$(python ./cicd/projects_updated.py)
+          echo $projects
           echo "projects=$projects" >> "$GITHUB_OUTPUT"
 
   ci:
