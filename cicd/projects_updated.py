@@ -52,7 +52,7 @@ def get_project_matrix(projects):
     list_str = "["
     for project in project_list:
         list_str += f"\"{project}\""
-    list_str = "]"
+    list_str += "]"
     return list_str
 
 def get_current_branch(repo_path):
