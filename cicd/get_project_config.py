@@ -27,10 +27,9 @@ parser.add_argument("-c", "--configuration", help="Configuration", default=None)
 args = vars(parser.parse_args())
 project_id = args["project"]
 stage = args["stage"]
-configuration = args["configuration"]
 
 config = get_project_config(CICD_REPO_PATH, project_id)
 if stage is None:
-    print(config[configuration])
+    print(config["configuration"])
 else:
-    print(config[stage][configuration])
+    print(config["stage"]["configuration"])
