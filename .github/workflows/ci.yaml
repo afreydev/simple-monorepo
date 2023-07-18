@@ -1,0 +1,55 @@
+name: CI backend
+on:
+  workflow_call:
+    inputs:
+      project-name:
+        required: true
+        type: string
+  workflow_dispatch:
+    inputs:
+      project-name:
+        required: true
+        type: string
+jobs:
+  get-ci-config:
+    runs-on: ubuntu-latest
+    env:
+      WORKING_DIR: cicd
+    outputs:
+      working-dir: ${{ steps.get-working-dir-step.outputs.working-dir }}
+      build: ${{ steps.get-build-step.outputs.build }}
+    defaults:
+      run:
+        working-directory: ${{ env.WORKING_DIR }}
+    steps:
+      - uses: actions/checkout@v2
+      - name: Get working dir
+        id: get-working-dir-step
+        run: |
+          working-dir=$(python get_working_dir.py -p ${{ inputs.project-name }})
+          echo "working-dir=$working-dir" >> "$GITHUB_OUTPUT"
+      - name: Get build
+        id: get-build-step
+        run: |
+          build=$(python get_working_dir.py -p ${{ inputs.project-name }} -s ci -c build)
+          echo "build=$build" >> "$GITHUB_OUTPUT"
+  build-docker:
+    runs-on: ubuntu-latest
+    if: needs.get-ci-config.outputs.build == 'docker'
+    defaults:
+      run:
+        working-directory: ${{ needs.get-ci-config.outputs.working-dir }}
+    steps:
+      - uses: actions/checkout@v2
+      -
+        name: Set up QEMU
+        uses: docker/setup-qemu-action@v2
+      -
+        name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+      -
+        name: Build and push
+        uses: docker/build-push-action@v3
+        with:
+          context: ${{ needs.get-ci-config.outputs.working-dir }}
+          push: false

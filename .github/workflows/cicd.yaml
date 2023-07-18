@@ -1,0 +1,41 @@
+name: CICD workflow
+on:
+  push:
+env:
+  WORKFLOW_TOKEN: ${{ secrets.WORKFLOW_TOKEN }}
+  CICD_REPO_PATH: ${{ secrets.CICD_REPO_PATH }}
+jobs:
+  ci-projects:
+    runs-on: ubuntu-latest
+    if: github.ref != 'refs/heads/main'
+    outputs:
+      projects: ${{ steps.project-step.outputs.projects }}
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: '2'
+      - name: fetch main
+        run: |
+          git fetch origin main --depth 1
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+      - name: Install workflow dependencies
+        run: |
+          pip install requests GitPython
+      - id: api-step
+        name: Check change in api
+        run: |
+          projects=$(python ./monorepo/projects_updated.py -c "origin/main")
+          echo "projects=$projects" >> "$GITHUB_OUTPUT"
+
+  ci:
+    needs:
+      - ci-projects
+    strategy:
+      matrix:
+        project: ${{ needs.ci-projects.outputs.projects }}
+    uses: /.github/workflows/ci.yaml
+    with:
+      project-name: ${{ matrix.project }}
+    secrets: inherit
