@@ -51,7 +51,7 @@ def get_project_matrix(projects):
     project_list = list(projects)
     list_str = "["
     for project in project_list:
-        if len(list_str) < 1:
+        if len(list_str) <= 1:
             list_str += f"\"{project}\""
         else:
             list_str += f",\"{project}\""
