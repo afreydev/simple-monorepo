@@ -43,7 +43,7 @@ jobs:
 
   deploy-helm:
     runs-on: ubuntu-latest
-    if: needs.get-cd-config.outputs.build == 'helm'
+    if: needs.get-cd-config.outputs.deploy == 'helm'
     needs:
       - ci
     defaults:
@@ -54,4 +54,4 @@ jobs:
       -
         name: Deploy helm
         run: |
-          echo "This is emulating a helm deploy :D"
+          echo "This is emulating a helm deploy of ${{ inputs.project-name }} :D"
