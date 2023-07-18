@@ -16,7 +16,7 @@ jobs:
     env:
       WORKING_DIR: cicd
     outputs:
-      working-dir: ${{ steps.get-working-dir-step.outputs.working-dir }}
+      working-dir: ${{ steps.get-working-dir-step.outputs.working }}
       build: ${{ steps.get-build-step.outputs.build }}
     defaults:
       run:
@@ -26,7 +26,8 @@ jobs:
       - name: Get working dir
         id: get-working-dir-step
         run: |
-          working-dir=$(python get_project_config.py -p ${{ inputs.project-name }})
+          working=$(python get_project_config.py -p ${{ inputs.project-name }})
+          echo "working=$working-dir" >> "$GITHUB_OUTPUT"
       - name: Get build
         id: get-build-step
         run: |
