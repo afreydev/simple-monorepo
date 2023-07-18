@@ -31,6 +31,6 @@ configuration = args["configuration"]
 
 config = get_project_config(CICD_REPO_PATH, project_id)
 if stage is None:
-    print(config["configuration"])
+    print(config["path"])
 else:
     print(config["stage"]["configuration"])
