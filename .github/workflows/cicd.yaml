@@ -7,9 +7,9 @@ env:
 jobs:
   ci-projects:
     runs-on: ubuntu-latest
-    #if: github.ref != 'refs/heads/main'
+    if: github.ref != 'refs/heads/main'
     outputs:
-      projects: ${{ steps.api-step.outputs.projects }}
+      projects: ${{ steps.ci-step.outputs.projects }}
     steps:
       - uses: actions/checkout@v2
         with:
@@ -23,10 +23,10 @@ jobs:
       - name: Install workflow dependencies
         run: |
           pip install requests GitPython
-      - id: api-step
-        name: Check change in api
+      - id: ci-step
+        name: Check change in ci
         run: |
-          projects=$(python ./cicd/projects_updated.py)
+          projects=$(python ./cicd/projects_updated.py -c "origin/main")
           echo $projects
           echo "projects=$projects" >> "$GITHUB_OUTPUT"
 
@@ -37,6 +37,42 @@ jobs:
       matrix:
         project: ${{ fromJson(needs.ci-projects.outputs.projects) }}
     uses: ./.github/workflows/ci.yaml
+    with:
+      project-name: ${{ matrix.project }}
+    secrets: inherit
+
+  cd-projects:
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+    outputs:
+      projects: ${{ steps.cd-step.outputs.projects }}
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: '2'
+      - name: fetch main
+        run: |
+          git fetch origin main --depth 1
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+      - name: Install workflow dependencies
+        run: |
+          pip install requests GitPython
+      - id: cd-step
+        name: Check change in cd
+        run: |
+          projects=$(python ./cicd/projects_updated.py -c "origin/main")
+          echo $projects
+          echo "projects=$projects" >> "$GITHUB_OUTPUT"
+
+  cd:
+    needs:
+      - cd-projects
+    strategy:
+      matrix:
+        project: ${{ fromJson(needs.cd-projects.outputs.projects) }}
+    uses: ./.github/workflows/cd.yaml
     with:
       project-name: ${{ matrix.project }}
     secrets: inherit

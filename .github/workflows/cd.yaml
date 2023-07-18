@@ -1,0 +1,57 @@
+name: CI backend
+on:
+  workflow_call:
+    inputs:
+      project-name:
+        required: true
+        type: string
+  workflow_dispatch:
+    inputs:
+      project-name:
+        required: true
+        type: string
+jobs:
+  get-cd-config:
+    runs-on: ubuntu-latest
+    env:
+      WORKING_DIR: cicd
+    outputs:
+      working-dir: ${{ steps.get-working-dir-step.outputs.working }}
+      deploy: ${{ steps.get-deploy-step.outputs.deploy }}
+    defaults:
+      run:
+        working-directory: ${{ env.WORKING_DIR }}
+    steps:
+      - uses: actions/checkout@v2
+      - name: Get working dir
+        id: get-working-dir-step
+        run: |
+          working=$(python get_project_config.py -p ${{ inputs.project-name }})
+          echo "working=$working" >> "$GITHUB_OUTPUT"
+      - name: Get deploy
+        id: get-deploy-step
+        run: |
+          deploy=$(python get_project_config.py -p ${{ inputs.project-name }} -s cd -c deploy)
+          echo "deploy=$deploy" >> "$GITHUB_OUTPUT"
+  ci:
+    needs:
+      - get-cd-config
+    uses: ./.github/workflows/ci.yaml
+    with:
+      project-name: ${{ inputs.project-name }}
+    secrets: inherit
+
+  deploy-helm:
+    runs-on: ubuntu-latest
+    if: needs.get-cd-config.outputs.build == 'helm'
+    needs:
+      - ci
+    defaults:
+      run:
+        working-directory: ${{ needs.get-cd-config.outputs.working-dir }}
+    steps:
+      - uses: actions/checkout@v2
+      -
+        name: Deploy helm
+        run: |
+          echo "This is emulating a helm deploy :D"
