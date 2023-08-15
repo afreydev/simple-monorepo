@@ -33,7 +33,7 @@ jobs:
   ci:
     needs:
       - ci-projects
-    if: ${{ matrix.project }} != 'empty'
+    if: ${{ needs.ci-projects.outputs.projects != '[]' }}
     strategy:
       matrix:
         project: ${{ fromJson(needs.ci-projects.outputs.projects) }}
@@ -70,6 +70,7 @@ jobs:
   cd:
     needs:
       - cd-projects
+    if: ${{ needs.ci-projects.outputs.projects != '[]' }}
     strategy:
       matrix:
         project: ${{ fromJson(needs.cd-projects.outputs.projects) }}
