@@ -33,6 +33,7 @@ jobs:
   ci:
     needs:
       - ci-projects
+    if: ${{ matrix.project }} != 'empty'
     strategy:
       matrix:
         project: ${{ fromJson(needs.ci-projects.outputs.projects) }}

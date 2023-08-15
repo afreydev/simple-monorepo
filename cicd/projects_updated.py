@@ -45,6 +45,8 @@ def search_in_updated_projects(repo_path, commit = LAST_COMMIT):
             if meta_file is not None:
                 info = load_json(meta_file)
                 projects.add(info["name"])
+    if len(projects) == 0:
+        projects.add("empty")
     return projects
 
 def get_project_matrix(projects):
