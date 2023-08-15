@@ -70,7 +70,7 @@ jobs:
   cd:
     needs:
       - cd-projects
-    if: ${{ needs.ci-projects.outputs.projects != '[]' }}
+    if: ${{ needs.cd-projects.outputs.projects != '[]' }}
     strategy:
       matrix:
         project: ${{ fromJson(needs.cd-projects.outputs.projects) }}
